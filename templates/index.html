@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='index.css')}}"
+        />
+
+        <link rel="icon" href="{{ url_for('static',
+        filename='Listube-logo.png')}}"" type="image/png" />
+        <title>LisTube</title>
+    </head>
+    <body>
+        <div class="wrapper">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                <i class="bi bi-collection-play-fill"></i>
+                <span>Toggle Sidebar</span>
+            </button>
+            <!--Sidebar-->
+            <div id="playlist">
+                <div class="d-flex flex-wrap p-2 mb-2 sidebar-header">
+                    <div class="d-grid g-2 play-button">
+                        <button
+                            class="btn btn-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#optionsModal"
+                        >
+                            Play!
+                        </button>
+                    </div>
+
+                    <div
+                        class="d-flex justify-content-between fw-bold text-light list-info"
+                    >
+                        <span id="time"></span>
+                        <span id="count"></span>
+                    </div>
+                </div>
+                <ul id="playlist-list" class="px-2 playlist-list">
+                    <small class="text-light playlist-helper">
+                        Click the add button on a video or drop it here to
+                        select it
+                    </small>
+                    <!-- This li element will never be displayed, is only for cloning -->
+                    <li class="card mb-3 d-none" id="playlistItemModel">
+                        <div class="row g-0">
+                            <div class="col-4 position-relative">
+                                <img alt="thumbnail" id="videoThumbnail" />
+                                <span
+                                    class="video-length"
+                                    id="videoLength"
+                                ></span>
+                            </div>
+                            <div class="col-7">
+                                <h4 class="card-title" id="videoTitle"></h4>
+                                <span
+                                    class="text-muted"
+                                    id="videoChannel"
+                                ></span>
+                                <span
+                                    class="text-muted"
+                                    id="videoTimeAgo"
+                                ></span>
+                            </div>
+                            <div class="col-1">
+                                <i
+                                    class="bi bi-x-circle delete-icon"
+                                    id="deleteIcon"
+                                ></i>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="px-2 px-md-5" id="content">
+                <div id="searchArea">
+                    <form id="form">
+                        <div
+                            class="d-flex flex-wrap justify-content-around align-items-center"
+                        >
+                            <div></div>
+                            <h1 class="col-6 page-title">LISTUBE</h1>
+                            <div>
+                                <a
+                                    href="/login"
+                                    class="btn btn-danger"
+                                    id="loginButton"
+                                    >Login</a
+                                >
+                                <a
+                                    class="btn btn-outline-secondary d-none"
+                                    id="logoutButton"
+                                >
+                                    Logout
+                                </a>
+                            </div>
+                            <p class="w-100 text-center mt-4 mb-1">
+                                Search youtube videos and create playlists
+                            </p>
+                        </div>
+                        <div class="input-group input-group-lg">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="search"
+                            />
+                            <button
+                                type="submit"
+                                class="btn btn-outline-secondary"
+                                id="submit"
+                                disabled
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    class="bi bi-search"
+                                    viewBox="0 0 16 16"
+                                >
+                                    <path
+                                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+                                    ></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="spinner d-none"></div>
+                    <ul class="results d-none" id="results">
+                        <!-- This li element will never be displayed, is only for cloning -->
+                        <li
+                            class="card mb-3 d-none video-card"
+                            draggable
+                            id="searchItemModel"
+                        >
+                            <div class="row g-0">
+                                <div class="col-4 position-relative">
+                                    <img alt="thumbnail" id="videoThumbnail" />
+                                    <span
+                                        class="video-length"
+                                        id="videoLength"
+                                    ></span>
+                                </div>
+                                <div class="col-8">
+                                    <div class="card-body">
+                                        <div class="row g-0">
+                                            <div class="col-10">
+                                                <h4
+                                                    class="card-title"
+                                                    id="videoTitle"
+                                                ></h4>
+                                                <div class="row">
+                                                    <span
+                                                        class="text-muted col-12 col-lg-5"
+                                                        id="videoChannel"
+                                                    ></span>
+                                                    <span
+                                                        class="text-muted col-12 col-lg-5 offset-lg-2"
+                                                        id="videoTimeAgo"
+                                                    ></span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="col-2 d-flex justify-content-end align-items-start"
+                                            >
+                                                <button
+                                                    class="btn btn-outline-primary btn-sm move-icon"
+                                                    id="transferVideo"
+                                                >
+                                                    Add
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="card-text d-none d-sm-block"
+                                            id="videoDescription"
+                                        ></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <!--This element will not be displayed, it will serve as the 
+                                ghost element when dragging a video-->
+                        <li class="card d-none ghost" id="ghost">
+                            <span id="ghostTitle"></span>
+                            <span id="ghostChannel"></span>
+                        </li>
+                    </ul>
+                    <div
+                        class="pagination d-flex justify-content-between flex-row-reverse"
+                    >
+                        <button
+                            class="btn btn-outline-info d-none"
+                            id="next-page"
+                        >
+                            <span>Next Page</span>
+                            <i class="bi bi-chevron-double-right"></i>
+                        </button>
+                        <button
+                            class="btn btn-outline-info d-none"
+                            id="prev-page"
+                        >
+                            <i class="bi bi-chevron-double-left"></i>
+                            <span>Previous Page</span>
+                        </button>
+                    </div>
+                </div>
+                <!--This div will only be displayed when the user finishes creating a playlist-->
+                <div class="d-none" id="watchArea">
+                    <iframe
+                        type="text/html"
+                        width="640"
+                        height="360"
+                        id="yt-player"
+                    ></iframe>
+                    <h2 id="playlistIndex"></h2>
+                    <div class="d-none" id="ratingButtons">
+                        <button id="likeButton">
+                            Like <i class="bi bi-hand-thumbs-up"></i>
+                        </button>
+                        <button id="dislikeButton">
+                            Dislike <i class="bi bi-hand-thumbs-down"></i>
+                        </button>
+                    </div>
+                    <div>
+                        <button id="previousVideo">
+                            Previous <i class="bi bi-chevron-double-left"></i>
+                        </button>
+                        <button id="nextVideo">
+                            Next <i class="bi bi-chevron-double-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="alert alert-primary alert-dismissible mx-auto d-none"
+                    role="alert"
+                    id="alert"
+                >
+                    <span id="alertText"></span>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        aria-label="Close"
+                        id="alertClose"
+                    ></button>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="modal fade"
+            id="optionsModal"
+            tabindex="-1"
+            aria-labelledby="optionsModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Where to watch the playlist</h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+
+                    <div class="modal-body d-grid gap-2">
+                        <button
+                            class="btn btn-primary"
+                            id="watchHere"
+                            data-bs-dismiss="modal"
+                        >
+                            Watch here!
+                        </button>
+                        <span class="text-center text-muted">or</span>
+                        <a
+                            class="btn btn-outline-info"
+                            id="loginToWatch"
+                            href="/login"
+                        >
+                            Login to watch on youtube
+                        </a>
+                        <button
+                            class="btn btn-danger d-none"
+                            data-bs-toggle="modal"
+                            data-bs-target="#playlistForm"
+                            id="watchYoutube"
+                        >
+                            Watch on youtube
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="modal fade"
+            id="playlistForm"
+            tabindex="-1"
+            aria-labelledby="optionsModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Playlist Options</h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="title" class="form-label"
+                                    >Title</label
+                                >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="titleInput"
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label"
+                                    >Description</label
+                                >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="descriptionInput"
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check form-check-inline">
+                                    <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="privacyStatus"
+                                        id="privacyStatusPublic"
+                                        value="Public"
+                                        checked
+                                    />
+                                    <label
+                                        class="form-check-label"
+                                        for="privacyStatusPublic"
+                                    >
+                                        Public
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="privacyStatus"
+                                        id="privacyStatusPrivate"
+                                        value="Private"
+                                    />
+                                    <label
+                                        class="form-check-label"
+                                        for="privacyStatusPrivate"
+                                    >
+                                        Private
+                                    </label>
+                                </div>
+                                <small class="text-muted d-block"
+                                    >If you set it to private, you'll have to be
+                                    logged in on youtube in order to see the
+                                    playlist</small
+                                >
+                            </div>
+                            <div class="modal-footer">
+                                <button
+                                    class="btn btn-danger"
+                                    id="submitListData"
+                                    disabled
+                                >
+                                    Go watch!
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+            crossorigin="anonymous"
+        ></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="{{ url_for('static', filename='timeAgo.js') }}"></script>
+        <script src="{{ url_for('static', filename='index.js') }}"></script>
+    </body>
+</html>
