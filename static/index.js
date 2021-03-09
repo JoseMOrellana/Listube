@@ -101,7 +101,12 @@ const transferVideo = (video) => {
         const secMatch = segRe.exec(duration);
         const minMatch = minRe.exec(duration);
         const hourMatch = hourRe.exec(duration);
-        let vidLengthContent = `${secMatch[1]}`;
+        let vidLengthContent;
+        if (secMatch) {
+            vidLengthContent = `${secMatch[1]}`;
+        } else {
+            vidLengthContent = "00";
+        }
         if (minMatch) {
             vidLengthContent = `${minMatch[1]}:`.concat(vidLengthContent);
         } else {
@@ -239,7 +244,12 @@ const fillResults = (data) => {
         const secMatch = segRe.exec(video.contentDetails.duration);
         const minMatch = minRe.exec(video.contentDetails.duration);
         const hourMatch = hourRe.exec(video.contentDetails.duration);
-        let vidLengthContent = `${secMatch[1]}`;
+        let vidLengthContent;
+        if (secMatch) {
+            vidLengthContent = `${secMatch[1]}`;
+        } else {
+            vidLengthContent = "00";
+        }
         if (minMatch) {
             vidLengthContent = `${minMatch[1]}:`.concat(vidLengthContent);
         } else {

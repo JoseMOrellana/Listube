@@ -18,11 +18,11 @@ SCOPES = ['https://www.googleapis.com/auth/youtube']
 API_SERVICE_NAME = 'youtube'
 API_VERSION = 'v3'
 
-api_key = "AIzaSyB6D-l_xnZMZcpfXGfKRZJE5lrIIGhdZfY"
+api_key = os.environ.get("YOUTUBE_API_KEY", None)
 youtube = build("youtube", "v3", developerKey=api_key)
 
 app = Flask(__name__)
-app.secret_key = 'Big secret, i know'
+app.secret_key = os.environ.get("SECRET_KEY", None)
 port = int(os.environ.get("PORT", 5000))
 
 def with_credentials(func):
