@@ -82,7 +82,8 @@
     width: 90vw;
 }
 
-#searchArea {
+#searchArea,
+#watchArea {
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
@@ -145,6 +146,10 @@
 
 #deleteIcon {
     cursor: pointer;
+}
+
+.pressed {
+    font-weight: bold;
 }
 
 /* SPINNER */

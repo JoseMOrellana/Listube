@@ -435,8 +435,15 @@ alertClose.addEventListener("click", () => {
 
 const refreshWatchArea = () => {
     console.log("called");
-    document.querySelector("#playlistIndex").innerHTML = playlistIndex;
+    document.querySelector("#currentVideo").innerHTML =
+        videos[playlistIndex].snippet.title;
     videoFrame.src = `http://www.youtube.com/embed/${videos[playlistIndex].id}?autoplay=1`;
+
+    if (playlistIndex === 0) {
+        previousVideoButton.classList.add("d-none");
+    } else {
+        previousVideoButton.classList.remove("d-none");
+    }
 
     if (credentials) {
         const rating = videos[playlistIndex].rating;
@@ -457,17 +464,15 @@ const refreshWatchArea = () => {
 };
 
 const changeRatingButton = (button, pressed) => {
+    const icons = button.querySelectorAll(".bi");
     if (pressed) {
         button.classList.add("pressed");
-        const icon = button.querySelector(".bi");
-        const iconClass = icon.classList[1];
-        icon.classList.replace(iconClass, iconClass + "-fill");
+        icons[0].classList.add("d-none");
+        icons[1].classList.remove("d-none");
     } else {
         button.classList.remove("pressed");
-        const icon = button.querySelector(".bi");
-        const iconClass = icon.classList[1];
-        icon.classList.replace(iconClass, iconClass.replace("-fill", ""));
-        console.log(icon.classList);
+        icons[1].classList.add("d-none");
+        icons[0].classList.remove("d-none");
     }
 };
 

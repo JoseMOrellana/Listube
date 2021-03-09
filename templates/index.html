@@ -222,25 +222,34 @@
                 <div class="d-none" id="watchArea">
                     <iframe
                         type="text/html"
-                        width="640"
-                        height="360"
+                        width="100%"
+                        height="420"
                         id="yt-player"
                     ></iframe>
-                    <h2 id="playlistIndex"></h2>
+                    <h2 id="currentVideo"></h2>
                     <div class="d-none" id="ratingButtons">
-                        <button id="likeButton">
-                            Like <i class="bi bi-hand-thumbs-up"></i>
+                        <button class="btn btn-outline-primary" id="likeButton">
+                            Like
+                            <i class="bi bi-hand-thumbs-up"></i>
+                            <i class="bi bi-hand-thumbs-up-fill d-none"></i>
                         </button>
-                        <button id="dislikeButton">
-                            Dislike <i class="bi bi-hand-thumbs-down"></i>
+                        <button
+                            class="btn btn-outline-danger"
+                            id="dislikeButton"
+                        >
+                            Dislike
+                            <i class="bi bi-hand-thumbs-down"></i>
+                            <i class="bi bi-hand-thumbs-down-fill d-none"></i>
                         </button>
                     </div>
-                    <div>
-                        <button id="previousVideo">
-                            Previous <i class="bi bi-chevron-double-left"></i>
-                        </button>
-                        <button id="nextVideo">
+                    <div
+                        class="d-flex justify-content-between flex-row-reverse mt-4"
+                    >
+                        <button class="btn btn-outline-info" id="nextVideo">
                             Next <i class="bi bi-chevron-double-right"></i>
+                        </button>
+                        <button class="btn btn-outline-info" id="previousVideo">
+                            Previous <i class="bi bi-chevron-double-left"></i>
                         </button>
                     </div>
                 </div>
