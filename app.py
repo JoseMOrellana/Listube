@@ -18,11 +18,12 @@ SCOPES = ['https://www.googleapis.com/auth/youtube']
 API_SERVICE_NAME = 'youtube'
 API_VERSION = 'v3'
 
-api_key = "AIzaSyBVizLAa6O0OLsRqFTE0uFIotrp3ro6zGI"
+api_key = "AIzaSyB6D-l_xnZMZcpfXGfKRZJE5lrIIGhdZfY"
 youtube = build("youtube", "v3", developerKey=api_key)
 
 app = Flask(__name__)
 app.secret_key = 'Big secret, i know'
+port = int(os.environ.get("PORT", 5000))
 
 def with_credentials(func):
     @wraps(func)
@@ -237,13 +238,6 @@ def credentials_to_dict(credentials):
 
 
 if __name__ == '__main__':
-    # When running locally, disable OAuthlib's HTTPs verification.
-    # ACTION ITEM for developers:
-    #     When running in production *do not* leave this option enabled.
-    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-
-    # Specify a hostname and port that are set as a valid redirect URI
-    # for your API project in the Google API Console.
-    app.run('localhost', 5000, debug=True)
+    app.run(host="0.0.0.0", port=port, debug=True)
 
 
