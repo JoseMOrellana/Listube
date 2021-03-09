@@ -63,9 +63,12 @@ form.addEventListener("submit", async (e) => {
     const spinner = searchArea.querySelector(".spinner");
     spinner.classList.remove("d-none");
 
-    const response = await axios.post("http://localhost:5000/search", {
-        q: searchInput.value,
-    });
+    const response = await axios.post(
+        "https://morning-woodland-72704.herokuapp.com/search",
+        {
+            q: searchInput.value,
+        }
+    );
 
     fillResults(response.data);
     spinner.classList.add("d-none");
@@ -155,19 +158,25 @@ const transferVideo = (video) => {
 };
 
 nextPage.addEventListener("click", async () => {
-    const response = await axios.post("http://localhost:5000/search", {
-        q: searchInput.value,
-        pageToken: nextPageToken,
-    });
+    const response = await axios.post(
+        "https://morning-woodland-72704.herokuapp.com/search",
+        {
+            q: searchInput.value,
+            pageToken: nextPageToken,
+        }
+    );
 
     fillResults(response.data);
 });
 
 prevPage.addEventListener("click", async () => {
-    const response = await axios.post("http://localhost:5000/search", {
-        q: searchInput.value,
-        pageToken: prevPageToken,
-    });
+    const response = await axios.post(
+        "https://morning-woodland-72704.herokuapp.com/search",
+        {
+            q: searchInput.value,
+            pageToken: prevPageToken,
+        }
+    );
 
     fillResults(response.data);
 });
@@ -179,10 +188,13 @@ watchHereButton.addEventListener("click", async () => {
     if (credentials) {
         ratingButtonsContainer.classList.remove("d-none");
         const videoIds = videos.map((video) => video.id);
-        const response = await axios.post("http://localhost:5000/get_ratings", {
-            token: credentials.token,
-            videoIds,
-        });
+        const response = await axios.post(
+            "https://morning-woodland-72704.herokuapp.com/get_ratings",
+            {
+                token: credentials.token,
+                videoIds,
+            }
+        );
 
         if (response.status === 200) {
             videos = videos.map((video, index) => ({
@@ -213,13 +225,16 @@ submitListDataButton.addEventListener("click", async (e) => {
         "input[name='privacyStatus']:checked"
     ).value;
 
-    const response = await axios.post("http://localhost:5000/create_playlist", {
-        videosIds,
-        title,
-        description,
-        privacyStatus,
-        token: credentials.token,
-    });
+    const response = await axios.post(
+        "https://morning-woodland-72704.herokuapp.com/create_playlist",
+        {
+            videosIds,
+            title,
+            description,
+            privacyStatus,
+            token: credentials.token,
+        }
+    );
     console.log(response);
     const playlistId = response.data.data.id;
 
@@ -374,19 +389,25 @@ nextVideoButton.addEventListener("click", () => {
 
 likeButton.addEventListener("click", async () => {
     if (likeButton.classList.contains("pressed")) {
-        const response = await axios.post("http://localhost:5000/rate", {
-            token: credentials.token,
-            videoId: videos[playlistIndex].id,
-            rating: "none",
-        });
+        const response = await axios.post(
+            "https://morning-woodland-72704.herokuapp.com/rate",
+            {
+                token: credentials.token,
+                videoId: videos[playlistIndex].id,
+                rating: "none",
+            }
+        );
 
         changeRatingButton(likeButton, false);
     } else {
-        const response = await axios.post("http://localhost:5000/rate", {
-            token: credentials.token,
-            videoId: videos[playlistIndex].id,
-            rating: "like",
-        });
+        const response = await axios.post(
+            "https://morning-woodland-72704.herokuapp.com/rate",
+            {
+                token: credentials.token,
+                videoId: videos[playlistIndex].id,
+                rating: "like",
+            }
+        );
         changeRatingButton(likeButton, true);
         changeRatingButton(dislikeButton, false);
     }
@@ -394,19 +415,25 @@ likeButton.addEventListener("click", async () => {
 
 dislikeButton.addEventListener("click", async () => {
     if (dislikeButton.classList.contains("pressed")) {
-        const response = await axios.post("http://localhost:5000/rate", {
-            token: credentials.token,
-            videoId: videos[playlistIndex].id,
-            rating: "none",
-        });
+        const response = await axios.post(
+            "https://morning-woodland-72704.herokuapp.com/rate",
+            {
+                token: credentials.token,
+                videoId: videos[playlistIndex].id,
+                rating: "none",
+            }
+        );
 
         changeRatingButton(dislikeButton, false);
     } else {
-        const response = await axios.post("http://localhost:5000/rate", {
-            token: credentials.token,
-            videoId: videos[playlistIndex].id,
-            rating: "dislike",
-        });
+        const response = await axios.post(
+            "https://morning-woodland-72704.herokuapp.com/rate",
+            {
+                token: credentials.token,
+                videoId: videos[playlistIndex].id,
+                rating: "dislike",
+            }
+        );
         changeRatingButton(dislikeButton, true);
         changeRatingButton(likeButton, false);
     }
@@ -417,9 +444,12 @@ loginToWatchButton.addEventListener("click", () => {
 });
 
 logoutButton.addEventListener("click", async () => {
-    const response = await axios.post("http://localhost:5000/logout", {
-        token: credentials.token,
-    });
+    const response = await axios.post(
+        "https://morning-woodland-72704.herokuapp.com/logout",
+        {
+            token: credentials.token,
+        }
+    );
     console.log(response);
     if (response.data && response.data.success === true) {
         localStorage.removeItem("credentials");
@@ -497,7 +527,7 @@ window.onload = async () => {
         watchYoutubeButton.classList.remove("d-none");
     } else {
         const response = await axios.get(
-            "http://localhost:5000/get_credentials"
+            "https://morning-woodland-72704.herokuapp.com/get_credentials"
         );
         console.log(response);
         if (response.data.data) {
